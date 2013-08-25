@@ -20,6 +20,7 @@ func main() {
     tld, domain, err := gotld.GetTld( *url )
     if err != nil {
         fmt.Println( err )
+        return
     }
     fmt.Printf( "TLD: %s, Domain: %s\n", tld.Tld, domain )
 }
