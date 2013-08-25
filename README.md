@@ -15,12 +15,13 @@ import "github.com/jonsen/gotld"
 
 ## Use gotld
 
-For example see gotld_test.go .
+For example.
 
-    tld, domain, err := gotld.GetTld( "www.forease.net" )
-    if nil != err {
-        fmt.Println(tld.Tld, domain)
+    tld, domain, err := gotld.GetTld( *url )
+    if err != nil {
+        fmt.Println( err )
     }
+    fmt.Printf( "TLD: %s, Domain: %s\n", tld.Tld, domain )
 
 ## About
 
