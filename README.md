@@ -6,11 +6,11 @@ Get domain's tld by go
 
 ## Install gotld
 
-    go get github.com/jonsen/gotld
+    go get github.com/forease/gotld
 
 ## Import gotld
 
-    import "github.com/jonsen/gotld"
+    import "github.com/forease/gotld"
 
 
 ## Use gotld
