@@ -1,69 +1,70 @@
 /**
  *
- * 
+ *
  */
 package gotld
 
-
 import (
-    //"fmt"
-    "strings"
+	//"fmt"
+	"errors"
+	"strings"
 )
-
 
 // tld item
 type TldItem struct {
-    Id int32
-    Country, Tld, Category string
+	Id                     int32
+	Country, Tld, Category string
 }
 
 const (
-    GOTLD_VERSION = "gotld V1.0"
+	GOTLD_VERSION = "gotld V1.0"
 )
 
 var tldMap = make(map[string]*TldItem)
 
 // Initialization Top Level Domain Table
 func init() {
-    initTld()
+	initTld()
 }
 
-// 
-// 
-func GetTld( url string ) ( tld *TldItem, domain string, err error ) {
-    var (
-        tmpTld, tar string
-        djump uint
-    )
+//
+//
+func GetTld(url string) (tld *TldItem, domain string, err error) {
+	var (
+		tmpTld, tar string
+		djump       uint
+	)
 
-    dm := strings.Split( url, "." )
+	dm := strings.Split(url, ".")
 
-    for i := len(dm) - 1; i >= 0; i-- {
+	for i := len(dm) - 1; i >= 0; i-- {
 
-        tmpTld = dm[i] + tar + tmpTld
-        tar = "."
+		tmpTld = dm[i] + tar + tmpTld
+		tar = "."
 
-        // 判断当前域名是否为域名
-        currTld, ok := tldMap[ tmpTld ]
-        if ok {
-            tld = currTld
-            if i - 1 >= 0 {
-                domain = dm[i-1] + "." + tmpTld
-            }
-        }
+		// 判断当前域名是否为域名
+		currTld, ok := tldMap[tmpTld]
+		if ok {
+			tld = currTld
+			if i-1 >= 0 {
+				domain = dm[i-1] + "." + tmpTld
+			}
+		}
 
-        djump++
+		djump++
 
-        if djump > 3 {
-            break
-        }
-    }
+		if djump > 3 {
+			break
+		}
+	}
 
+	if tld == nil {
+		err = errors.New("tld not found")
+	}
 
-    return tld, domain, err
+	return tld, domain, err
 }
-
 
 func GetVersion() string {
-    return GOTLD_VERSION
+	return GOTLD_VERSION
 }
