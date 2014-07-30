@@ -14,10 +14,11 @@ import (
 type TldItem struct {
 	Id                     int32
 	Country, Tld, Category string
+	Lables                 int
 }
 
 const (
-	GOTLD_VERSION = "gotld V1.0"
+	GOTLD_VERSION = "gotld V1.1"
 )
 
 var tldMap = make(map[string]*TldItem)
@@ -60,6 +61,8 @@ func GetTld(url string) (tld *TldItem, domain string, err error) {
 
 	if tld == nil {
 		err = errors.New("tld not found")
+	} else {
+		tld.Lables = len(dm)
 	}
 
 	return tld, domain, err
