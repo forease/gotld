@@ -36,7 +36,6 @@ func GetTld(url string) (tld TldItem, domain string, err error) {
 	size := len(dm)
 	if size == 1 {
 		tld, _ = tldMap[url]
-		goto ret
 	}
 
 	for i := 1; i < size; i++ {
@@ -47,7 +46,6 @@ func GetTld(url string) (tld TldItem, domain string, err error) {
 		}
 	}
 
-ret:
 	if tld.Tld == "" {
 		err = errors.New("Can't get tld from " + url)
 	} else {
