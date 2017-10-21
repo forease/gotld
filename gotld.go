@@ -34,16 +34,16 @@ func GetTld(url string) (tld TldItem, domain string, err error) {
 	dm := strings.Split(url, ".")
 
 	size := len(dm)
-	if size == 1 {
-		tld, _ = tldMap[url]
-	}
-
-	for i := 1; i < size; i++ {
-		value, ok := tldMap[strings.Join(dm[size-i:size], ".")]
-		if ok {
-			tld = value
-			domain = strings.Join(dm[size-i-1:size], ".")
+	if size > 1 {
+		for i := 1; i < size; i++ {
+			value, ok := tldMap[strings.Join(dm[size-i:size], ".")]
+			if ok {
+				tld = value
+				domain = strings.Join(dm[size-i-1:size], ".")
+			}
 		}
+	} else {
+		tld, _ = tldMap[url]
 	}
 
 	if tld.Tld == "" {
