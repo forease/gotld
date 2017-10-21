@@ -5,7 +5,6 @@
 package gotld
 
 import (
-	//"fmt"
 	"errors"
 	"strings"
 )
@@ -18,10 +17,10 @@ type TldItem struct {
 }
 
 const (
-	GOTLD_VERSION = "gotld V1.1"
+	GOTLD_VERSION = "gotld V1.2"
 )
 
-var tldMap = make(map[string]*TldItem)
+var tldMap = make(map[string]TldItem)
 
 // Initialization Top Level Domain Table
 func init() {
@@ -30,39 +29,29 @@ func init() {
 
 //
 //
-func GetTld(url string) (tld *TldItem, domain string, err error) {
-	var (
-		tmpTld, tar string
-		djump       uint
-	)
+func GetTld(url string) (tld TldItem, domain string, err error) {
 
 	dm := strings.Split(url, ".")
 
-	for i := len(dm) - 1; i >= 0; i-- {
+	size := len(dm)
+	if size == 1 {
+		tld, _ = tldMap[url]
+		goto ret
+	}
 
-		tmpTld = dm[i] + tar + tmpTld
-		tar = "."
-
-		// 判断当前域名是否为域名
-		currTld, ok := tldMap[tmpTld]
+	for i := 1; i < size; i++ {
+		value, ok := tldMap[strings.Join(dm[size-i:size], ".")]
 		if ok {
-			tld = currTld
-			if i-1 >= 0 {
-				domain = dm[i-1] + "." + tmpTld
-			}
-		}
-
-		djump++
-
-		if djump > 3 {
-			break
+			tld = value
+			domain = strings.Join(dm[size-i-1:size], ".")
 		}
 	}
 
-	if tld == nil {
-		err = errors.New("tld not found")
+ret:
+	if tld.Tld == "" {
+		err = errors.New("Can't get tld from " + url)
 	} else {
-		tld.Lables = len(dm)
+		tld.Lables = size
 	}
 
 	return tld, domain, err
